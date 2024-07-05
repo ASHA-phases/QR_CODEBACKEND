@@ -30,8 +30,8 @@ export class QrCodeService {
           if (!data.countryCode || !data.phoneNumber || !data.message) {
             throw new Error('Missing data for WhatsApp QR code');
           }
-          const ecnocdedMessage =encodeURIComponent(data.message);
-          qrCodeData = `https://wa.me/${data.countryCode}${data.phoneNumber}?text=${ecnocdedMessage}`;
+          const encodedMessage = encodeURIComponent(data.message);
+          qrCodeData = `https://wa.me/${data.countryCode}${data.phoneNumber}?text=${encodedMessage}`;
           break;
         case 'Wifi':
           qrCodeData = `WIFI:S:${data.ssid};T:${data.networkType};P:${data.password};H:${data.hidden ? 'true' : 'false'};`;
