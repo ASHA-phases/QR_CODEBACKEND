@@ -6,7 +6,7 @@ export class QrCodeController {
   constructor(private readonly qrCodeService: QrCodeService) {}
 
   @Post('generate')
-  async generateQRCode(@Body() body: { type: string, data: any }) {
+  async generateQRCode(@Body() body: { type: string; data: any }) {
     const { type, data } = body;
     return {
       qrCode: await this.qrCodeService.generateQRCode(type, data),

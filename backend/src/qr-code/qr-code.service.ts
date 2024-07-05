@@ -21,16 +21,17 @@ export class QrCodeService {
           qrCodeData = `tel:${data.countryCode}${data.phoneNumber}`;
           break;
         case 'Sms':
-          if (!data.countryCode || !data.phoneNumber || !data.text) {
+          if (!data.countryCode || !data.phoneNumber || !data.message) {
             throw new Error('Missing data for SMS QR code');
           }
           qrCodeData = `sms:${data.countryCode}${data.phoneNumber}&body=${encodeURIComponent(data.message)}`;
           break;
         case 'Whatsapp':
-          if (!data.countryCode || !data.phoneNumber || !data.text) {
+          if (!data.countryCode || !data.phoneNumber || !data.message) {
             throw new Error('Missing data for WhatsApp QR code');
           }
-          qrCodeData = `https://wa.me/${data.countryCode}${data.phoneNumber}&text=${encodeURIComponent(data.message)}`;
+          const encodedMessage = encodeURIComponent(data.message);
+          qrCodeData = `https://wa.me/${data.countryCode}${data.phoneNumber}?text=${encodedMessage}`;
           break;
         case 'Wifi':
           qrCodeData = `WIFI:S:${data.ssid};T:${data.networkType};P:${data.password};H:${data.hidden ? 'true' : 'false'};`;
