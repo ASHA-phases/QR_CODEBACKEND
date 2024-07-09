@@ -99,6 +99,9 @@ export class QrCodeService {
       case 'Wifi':
         qrCodeData = `WIFI:S:${data.ssid};T:${data.networkType};P:${data.password};H:${data.hidden ? 'true' : 'false'};`;
         break;
+      case 'PDF':
+        qrCodeData = data.url;
+        break;
       case 'VCard':
         qrCodeData = `BEGIN:VCARD
 VERSION:3.0

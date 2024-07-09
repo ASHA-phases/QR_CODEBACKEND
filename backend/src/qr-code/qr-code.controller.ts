@@ -1,6 +1,11 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Res,UploadedFile, UseInterceptors } from '@nestjs/common';
 import { QrCodeService } from './qr-code.service';
 import { Response } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import * as path from 'path';
+import { Express } from 'express';
+
  
 @Controller('qr-code')
 export class QrCodeController {
@@ -37,4 +42,21 @@ export class QrCodeController {
     res.setHeader('Content-Type', 'application/pdf');
     res.send(buffer);
   }
+  @Post('upload-pdf')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const filename = `${Date.now()}-${file.originalname}`;
+          cb(null, filename);
+        },
+      }),
+    }),
+  )
+  uploadPDF(@UploadedFile() file: Express.Multer.File) {
+    const fileUrl = `http://localhost:4000/uploads/${file.filename}`;
+    return { fileUrl };
+  }
 }
+  
