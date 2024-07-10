@@ -122,6 +122,18 @@ END:VCARD`;
       case 'App':
         qrCodeData = `App Download links:\nApp Store : ${data.appStoreLink}\nPlay Store : ${data.playStoreLink}`;
         break;
+        case 'Video':
+          qrCodeData = data.videoUrl;
+        break;
+        case 'Facebook':
+          qrCodeData = data.profileUrl;
+        break;
+        case 'Twitter':
+          qrCodeData = data.profileUrl;
+        break;
+        case 'Location':
+          qrCodeData = `geo:${data.latitude},${data.longitude}`; 
+          break;
 
       default:
         throw new Error('Unsupported QR code type');
