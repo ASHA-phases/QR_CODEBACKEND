@@ -119,6 +119,10 @@ END:VCARD`;
       case 'Social Media':
         qrCodeData = `Social Media Profiles:\nFacebook: ${data.facebookUrl}\nTwitter: ${data.twitterUrl}`;
         break;
+      case 'App':
+        qrCodeData = `App Download links:\nApp Store : ${data.appStoreLink}\nPlay Store : ${data.playStoreLink}`;
+        break;
+
       default:
         throw new Error('Unsupported QR code type');
     }
