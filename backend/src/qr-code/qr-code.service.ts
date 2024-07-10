@@ -3,7 +3,7 @@ import * as QRCode from 'qrcode';
 import * as PDFDocument from 'pdfkit';
 import * as fs from 'fs';
 import * as path from 'path';
- 
+
 @Injectable()
 export class QrCodeService {
   async generateQRCode(type: string, data: any): Promise<string> {
@@ -15,7 +15,7 @@ export class QrCodeService {
       throw new Error('Error generating QR code');
     }
   }
- 
+
   async generateQRCodePNG(type: string, data: any): Promise<Buffer> {
     try {
       const qrCodeData = this.getQRCodeData(type, data);
@@ -25,7 +25,7 @@ export class QrCodeService {
       throw new Error('Error generating PNG QR code');
     }
   }
- 
+
   async generateQRCodeSVG(type: string, data: any): Promise<string> {
     try {
       const qrCodeData = this.getQRCodeData(type, data);
@@ -35,16 +35,16 @@ export class QrCodeService {
       throw new Error('Error generating SVG QR code');
     }
   }
- 
+
   async generateQRCodePDF(type: string, data: any): Promise<Buffer> {
     try {
       const qrCodeData = this.getQRCodeData(type, data);
       const buffer = await QRCode.toBuffer(qrCodeData);
- 
+
       const doc = new PDFDocument();
       const pdfPath = path.join(__dirname, 'qr-code.pdf');
       const writeStream = fs.createWriteStream(pdfPath);
- 
+
       doc.pipe(writeStream);
       doc.image(buffer, {
         fit: [250, 300],
@@ -52,7 +52,7 @@ export class QrCodeService {
         valign: 'center',
       });
       doc.end();
- 
+
       return new Promise((resolve, reject) => {
         writeStream.on('finish', () => {
           resolve(fs.readFileSync(pdfPath));
@@ -66,10 +66,10 @@ export class QrCodeService {
       throw new Error('Error generating PDF QR code');
     }
   }
- 
+
   private getQRCodeData(type: string, data: any): string {
     let qrCodeData: string;
- 
+
     switch (type) {
       case 'Link':
         qrCodeData = data.url;
@@ -99,6 +99,9 @@ export class QrCodeService {
       case 'Wifi':
         qrCodeData = `WIFI:S:${data.ssid};T:${data.networkType};P:${data.password};H:${data.hidden ? 'true' : 'false'};`;
         break;
+      case 'Event':
+        qrCodeData = `BEGIN:VEVENT\nSUMMARY:${data.eventName}\nDTSTART:${data.startDate.replace(/-|:/g, '')}\nDTEND:${data.endDate.replace(/-|:/g, '')}\nLOCATION:${data.location}\nDESCRIPTION:${data.description}\nEND:VEVENT`;
+        break;
       case 'VCard':
         qrCodeData = `BEGIN:VCARD
 VERSION:3.0
@@ -113,10 +116,13 @@ ADR:${data.address};${data.city};${data.postCode};${data.country}
 URL:${data.website}
 END:VCARD`;
         break;
+      case 'Social Media':
+        qrCodeData = `Social Media Profiles:\nFacebook: ${data.facebookUrl}\nTwitter: ${data.twitterUrl}`;
+        break;
       default:
         throw new Error('Unsupported QR code type');
     }
- 
+
     return qrCodeData;
   }
 }
