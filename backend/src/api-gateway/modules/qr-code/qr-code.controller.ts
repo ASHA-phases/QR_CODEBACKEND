@@ -1,12 +1,14 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Res, UseGuards, UseFilters } from '@nestjs/common';
 import { QrCodeService } from './qr-code.service';
 import { Response } from 'express';
+//import { AuthGuard } from '../../../infrastructure/guards/auth.guard';
 
 @Controller('qr-code')
 export class QrCodeController {
   constructor(private readonly qrCodeService: QrCodeService) {}
 
   @Post('generate')
+ // @UseGuards(AuthGuard) // Apply AuthGuard to require authentication
   async generateQRCode(@Body() body: { type: string; data: any }) {
     const { type, data } = body;
     return {
@@ -15,6 +17,7 @@ export class QrCodeController {
   }
 
   @Post('generate-png')
+  //@UseGuards(AuthGuard) // Apply AuthGuard to require authentication
   async generateQRCodePNG(@Body() body: { type: string; data: any }, @Res() res: Response) {
     const { type, data } = body;
     const buffer = await this.qrCodeService.generateQRCodePNG(type, data);
@@ -23,6 +26,7 @@ export class QrCodeController {
   }
 
   @Post('generate-svg')
+  //@UseGuards(AuthGuard) // Apply AuthGuard to require authentication
   async generateQRCodeSVG(@Body() body: { type: string; data: any }, @Res() res: Response) {
     const { type, data } = body;
     const svg = await this.qrCodeService.generateQRCodeSVG(type, data);
@@ -31,6 +35,7 @@ export class QrCodeController {
   }
 
   @Post('generate-pdf')
+  //@UseGuards(AuthGuard) // Apply AuthGuard to require authentication
   async generateQRCodePDF(@Body() body: { type: string; data: any }, @Res() res: Response) {
     const { type, data } = body;
     const buffer = await this.qrCodeService.generateQRCodePDF(type, data);
@@ -38,3 +43,7 @@ export class QrCodeController {
     res.send(buffer);
   }
 }
+
+
+
+
