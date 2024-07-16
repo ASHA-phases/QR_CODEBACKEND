@@ -1,5 +1,12 @@
 import { QR_CODE_TYPES } from '../../shared/constants/qr-code.constants';
 
+/**
+ * Generates the data string for a QR code based on the specified type and data.
+ * @param {string} type - The type of QR code to generate (e.g., LINK, EMAIL, TEXT).
+ * @param {any} data - The data object containing information relevant to the QR code type.
+ * @returns {string} - The data string formatted for the specified QR code type.
+ * @throws {Error} - Throws an error if the QR code type is unsupported or if required data is missing.
+ */
 export const getQRCodeData = (type: string, data: any): string => {
   let qrCodeData: string;
 
@@ -65,7 +72,7 @@ END:VCARD`;
       qrCodeData = data.profileUrl;
       break;
     case QR_CODE_TYPES.LOCATION:
-      qrCodeData = `geo:${data.latitude},${data.longitude}`; 
+      qrCodeData = `geo:${data.latitude},${data.longitude}`;
       break;
     default:
       throw new Error('Unsupported QR code type');
